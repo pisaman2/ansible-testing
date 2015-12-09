@@ -1,0 +1,7 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+    - name: Update repos then install mate - the complete version without the extras
+      apt: name=mate-desktop-environment update_cache=yes
