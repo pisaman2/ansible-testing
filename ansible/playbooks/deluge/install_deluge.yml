@@ -1,0 +1,42 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+    - name: Update repo
+      apt: update_cache=yes
+   
+
+
+
+
+    - name: Install required packages
+      apt: name={{ item }}
+      with_items:
+         - deluged
+         - deluge-webui
+         - deluge-console
+
+
+
+
+    - name: Add deluged.service
+      copy: src=files/deluged.service dest=/etc/systemd/system/deluged.service
+
+    - name: Add deluge-web.service
+      copy: src=files/deluge-web.service dest=/etc/systemd/system/deluge-web.service
+
+
+    - name: Enable services
+      service: name={{ item }} enabled=yes
+      with_items:
+         - deluged
+         - deluge-web
+
+    - name: Start services
+      service: name={{ item }} state=restarted
+      with_items:
+         - deluged
+         - deluge-web
+
+
