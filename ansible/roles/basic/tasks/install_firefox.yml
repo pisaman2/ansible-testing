@@ -1,0 +1,15 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+
+
+
+    - name: add linux mint's repo
+      apt_repository: repo='deb http://packages.linuxmint.com debian import' state=present update_cache=yes
+
+
+
+    - name: install firefox
+      apt: name=firefox force=yes

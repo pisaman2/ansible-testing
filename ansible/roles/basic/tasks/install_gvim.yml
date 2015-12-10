@@ -1,0 +1,7 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+    - name: Update repos then install gvim
+      apt: name=vim-gtk update_cache=yes

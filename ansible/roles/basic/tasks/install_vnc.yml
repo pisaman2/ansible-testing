@@ -1,0 +1,18 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+    - name: Update repos then install package
+      apt: name={{ item }} update_cache=yes
+      with_items:
+         - xfce4 
+         - xfce4-goodies 
+         - gnome-icon-theme 
+         - tightvncserver
+
+    - name: Add vnc group
+      group: name=vnc state=present
+
+    - name: Add vnc user
+      user: name=vnc groups=vnc system=yes
