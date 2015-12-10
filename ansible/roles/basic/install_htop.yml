@@ -1,7 +1,0 @@
----
-- hosts: vm
-  remote_user: sam
-  sudo: yes
-  tasks:
-    - name: Update repos then install htop
-      apt: name=htop update_cache=yes
