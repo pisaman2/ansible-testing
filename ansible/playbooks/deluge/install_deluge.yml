@@ -5,10 +5,17 @@
   tasks:
     - name: Update repo
       apt: update_cache=yes
-   
+  
+
+    - name: Create deluge group
+      group: name=deluge system=yes
+
+    - name: Add deluge user
+      user: name=deluge comment="The user for deluge services" system=yes group=deluge home=/var/lib/deluge
 
 
-
+    - name: Add sam user to deluge group
+      user: name=sam groups=deluge append=yes
 
     - name: Install required packages
       apt: name={{ item }}
