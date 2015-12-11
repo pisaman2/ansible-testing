@@ -1,0 +1,35 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+    - name: Update repos then install lightdm
+      apt: name=lightdm update_cache=yes
+
+    - name: change to default display manager
+      copy: src=../files/default-display-manager dest=/etc/X11/default-display-manager
+
+    - name: 'Insert config lines under Seat:0 in /etc/lightdm/lightdm.conf'
+      lineinfile: dest=/etc/lightdm/lightdm.conf line={{ item }} state=present insertafter="#type=xlocal"
+      with_items:
+         - 'pam-service=lightdm'
+         - 'pam-autologin-service=lightdm-autologin'
+         - 'autologin-user=sam'
+         - 'autologin-user-timeout=0'
+         - 'session-wrapper=lightdm-session'
+
+
+    - name: Remove commented lines in /etc/lightdm/lightdm.conf
+      lineinfile: dest=/etc/lightdm/lightdm.conf line={{ item }} state=absent
+      with_items: 
+         - '#pam-service=lightdm'
+         - '#pam-autologin-service=lightdm-autologin'
+         - '#autologin-user='
+         - '#autologin-user-timeout=0'
+         - '#session-wrapper=lightdm-session'
+ 
+    - name: Add autologin group
+      group: name=autologin
+
+    - name: add sam user to autologin group
+      user: name=sam groups=autologin append=yes

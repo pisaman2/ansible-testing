@@ -1,0 +1,13 @@
+---
+- hosts: vm
+  remote_user: sam
+  sudo: yes
+  tasks:
+    - name: Update repos then install software-properties-common 
+      apt: name=software-properties-common update_cache=yes
+
+    - name: Add jessie backports to sources.list and update cache
+      apt_repository: repo='deb http://http.debian.net/debian jessie-backports main' state=present update_cache=yes
+
+    - name: Install kodi
+      apt: name=kodi
